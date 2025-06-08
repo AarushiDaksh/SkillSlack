@@ -97,7 +97,8 @@ export default function ContactUs() {
         initial="hidden"
         animate="visible"
         variants={containerVariants}
-        className="w-full mx-auto mt-16 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700"
+        className="w-full max-w-2xl mx-auto mt-10 p-6 sm:p-8 rounded-xl shadow-lg bg-white/80 dark:bg-gray-900/80 border border-gray-200 dark:border-gray-700"
+
       >
 
       <Toaster />

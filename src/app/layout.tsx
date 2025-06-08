@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,32 +24,36 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "SkillSwap",
-  description: "Buy and sell unused software licenses at competitive prices. Save up to 70% compared to retail prices with our secure marketplace platform.",
-  keywords: ["software licenses", "buy software", "sell software licenses", "software marketplace", "IT procurement", "license resale"],
-  authors: [{ name: "SoftSell Team" }],
-  creator: "SoftSell",
-  publisher: "SoftSell",
-  metadataBase: new URL("https://softsell-marketplace.com"),
+  title: "SkillSwap | Resell Software Licenses Effortlessly",
+  description:
+    "SkillSwap empowers individuals and businesses to securely resell unused software licenses. Join our marketplace and unlock hidden value with ease.",
+  keywords: [
+    "SkillSwap"
+  ],
+  authors: [{ name: "SkillSwap Team" }],
+  creator: "SkillSwap",
+  publisher: "SkillSwap",
+  metadataBase: new URL("https://skillswap.io"),
   openGraph: {
     type: "website",
-    title: "SoftSell | Transform Unused Software into Revenue",
-    description: "Buy and sell unused software licenses at competitive prices. Our platform helps businesses optimize IT spending.",
-    siteName: "SoftSell",
+    title: "SkillSwap | MarketPlace",
+    description:
+      "Join SkillSwap.",
+    siteName: "SkillSwap",
     images: [
       {
-        url: "/images/softsell-og-image.jpg",
+        url: "/images/skillswap-og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "SoftSell Software License Marketplace",
+        alt: "SkillSwap Software Resell Platform",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SoftSell | Software License Marketplace",
-    description: "Buy and sell unused software licenses at competitive prices.",
-    images: ["/images/softsell-twitter-image.jpg"],
+    title: "SkillSwap | Marketplace",
+    description: "Fast, secure, and smart.",
+    images: ["/images/skillswap-twitter-image.jpg"],
   },
   robots: {
     index: true,

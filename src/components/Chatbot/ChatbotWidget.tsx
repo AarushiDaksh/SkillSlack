@@ -67,7 +67,8 @@ export function ChatbotWidget() {
   }, [isOpen, isMobile]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100]">
+   <div className="fixed top-1/2 right-6 -translate-y-1/2 z-[100]">
+
       <AnimatePresence>
         {isOpen && (
           <motion.div

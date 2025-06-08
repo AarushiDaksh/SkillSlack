@@ -121,7 +121,12 @@ export default function ContactUs() {
                   <FormControl>
                     <div className="relative">
                       <Smile className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                      <Input className="pl-10 rounded-xl bg-gray-900 border-gray-700 text-white" placeholder="Jane Doe" {...field} />
+<Input
+  className="pl-10 rounded-xl bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-black dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
+  placeholder="Name"
+  {...field}
+/>
+
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -136,7 +141,12 @@ export default function ContactUs() {
                   <FormControl>
                     <div className="relative">
                       <NotebookPen className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                      <Input className="pl-10 rounded-xl bg-gray-900 border-gray-700 text-white" placeholder="you@skillswap.io" {...field} />
+<Input
+  className="pl-10 rounded-xl bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-black dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
+  placeholder="Email"
+  {...field}
+/>
+
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -150,7 +160,12 @@ export default function ContactUs() {
               <FormItem>
                 <FormLabel>Your Message</FormLabel>
                 <FormControl>
-                  <Textarea className="min-h-[120px] rounded-xl bg-gray-900 border-gray-700 text-white" placeholder="Tell us how we can help or collaborate..." {...field} />
+<Textarea
+  className="min-h-[120px] rounded-xl bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-black dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
+  placeholder="Tell us how we can help or collaborate..."
+  {...field}
+/>
+
                 </FormControl>
                 <FormDescription>Include any relevant info that will help us assist you better.</FormDescription>
                 <FormMessage />

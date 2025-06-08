@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+Rules:
+- To get any new shadcn component use this command: npx shadcn@latest add button(name of component.)
+
+- Always use the Shadcn component where you can. Even for Button, Input, etc...
+

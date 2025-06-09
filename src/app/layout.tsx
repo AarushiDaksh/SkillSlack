@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
+import ClientWrapper from "@/components/client-wrapper"; // import wrapper
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,12 +23,10 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "SkillSwap | Resell Software Licenses Effortlessly",
+  title: "SkillSwap | MarketPlace",
   description:
     "SkillSwap empowers individuals and businesses to securely resell unused software licenses. Join our marketplace and unlock hidden value with ease.",
-  keywords: [
-    "SkillSwap"
-  ],
+  keywords: ["SkillSwap"],
   authors: [{ name: "SkillSwap Team" }],
   creator: "SkillSwap",
   publisher: "SkillSwap",
@@ -37,8 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     title: "SkillSwap | MarketPlace",
-    description:
-      "Join SkillSwap.",
+    description: "Join SkillSwap.",
     siteName: "SkillSwap",
     images: [
       {
@@ -66,18 +62,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
-        <Toaster />
+        <ClientWrapper>{children}</ClientWrapper>
       </body>
     </html>
   );

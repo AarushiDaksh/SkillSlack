@@ -74,7 +74,7 @@ export default function DashboardPage() {
                     <p className="font-medium">List your skills or services</p>
                     <p className="text-sm text-gray-500">Share what you offer or want to learn.</p>
                   </div>
-                  <button className="text-blue-500 text-sm font-semibold">Add</button>
+                  <button className="text-blue-400 text-sm font-semibold">Add</button>
                 </div>
               </div>
             </div>

@@ -12,12 +12,10 @@ export default function DashboardPage() {
   const [newQ, setNewQ] = useState('');
   const [newA, setNewA] = useState('');
 
-  // Redirect if not logged in
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/');
   }, [status]);
 
-  // Fetch profile on load
   useEffect(() => {
     const fetchProfile = async () => {
       if (session?.user?.email) {
@@ -27,7 +25,6 @@ export default function DashboardPage() {
         if (data && Object.keys(data).length > 0) {
           setProfile(data);
         } else {
-          // Create base profile if doesn't exist
           const newProfile = {
             email: session.user.email,
             name: session.user.name,
@@ -74,12 +71,12 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black py-12 px-4">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-        
+
         {/* Profile Panel */}
         <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-md">
           <div className="flex flex-col items-center text-center">
             <img
-              src={profile.image || '/avatar-placeholder.png'}
+              src={profile.image?.startsWith("http") ? profile.image : '/avatar-placeholder.png'}
               alt="Profile"
               className="w-24 h-24 rounded-full object-cover"
             />

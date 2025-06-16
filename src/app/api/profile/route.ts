@@ -9,12 +9,13 @@ export async function GET(req: Request) {
 
     const { searchParams } = new URL(req.url);
     const email = searchParams.get('email');
+
     if (!email) return NextResponse.json({ error: 'Missing email' }, { status: 400 });
 
     const profile = await UserProfile.findOne({ email });
     return NextResponse.json(profile || {});
-  } catch (err) {
-    console.error('GET /api/profile error:', err);
+  } catch (error) {
+    console.error("GET /api/profile error:", error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
@@ -31,8 +32,8 @@ export async function POST(req: Request) {
     );
 
     return NextResponse.json(profile);
-  } catch (err) {
-    console.error('POST /api/profile error:', err);
+  } catch (error) {
+    console.error("POST /api/profile error:", error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }

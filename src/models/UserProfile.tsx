@@ -8,6 +8,6 @@ const ProfileSchema = new mongoose.Schema({
   language: String,
   skills: [String],
   learning: [String],
-});
+}, { timestamps: true });
 
 export default mongoose.models.Profile || mongoose.model('Profile', ProfileSchema);

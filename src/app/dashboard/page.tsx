@@ -54,16 +54,11 @@ export default function DashboardPage() {
         {/* Profile Panel */}
         <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-lg">
           <div className="flex flex-col items-center text-center">
-          <img
-            src={
-              profile.image?.startsWith('http')
-                ? profile.image
-                : `https://github.com/${profile.email?.split('@')[0]}.png`
-            }
-            alt="Profile"
-            className="w-28 h-28 rounded-full object-cover shadow-md"
-          />
-
+            <img
+              src={profile.image?.startsWith('http') ? profile.image : '/avatar-placeholder.png'}
+              alt="Profile"
+              className="w-28 h-28 rounded-full object-cover shadow-md"
+            />
             <h2 className="mt-4 text-2xl font-extrabold text-gray-800 dark:text-white">{profile.name}</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">@{profile.email?.split('@')[0]}</p>
             <a

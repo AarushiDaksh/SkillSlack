@@ -14,32 +14,43 @@ export default function DashboardPage() {
     if (status === 'unauthenticated') router.push('/');
   }, [status]);
 
-  useEffect(() => {
-    const fetchGitHubProfile = async () => {
-      if (session?.user?.email) {
-        const username = session.user.email.split('@')[0];
-        try {
-          const res = await fetch(`https://api.github.com/users/${username}`);
-          const githubData = await res.json();
+useEffect(() => {
+  const fetchGitHubProfile = async () => {
+    if (session?.user?.email) {
+      const username = session.user.email.split('@')[0];
+      try {
+        const res = await fetch(`https://api.github.com/users/${username}`);
+        const githubData = await res.json();
 
-          const newProfile = {
-            email: session.user.email,
-            name: githubData.name || session.user.name,
-            image: githubData.avatar_url || session.user.image,
-            location: githubData.location || 'India',
-            language: 'English',
-            skills: ['JavaScript', 'React'],
-            learning: ['TypeScript'],
-          };
-          setProfile(newProfile);
-        } catch (err) {
-          console.error('GitHub API failed:', err);
-        }
+        const newProfile = {
+          email: session.user.email,
+          name: githubData.name || session.user.name,
+          image: githubData.avatar_url || session.user.image,
+          location: githubData.location || 'India',
+          language: 'English',
+          skills: ['JavaScript', 'React'],
+          learning: ['TypeScript'],
+        };
+
+        setProfile(newProfile);
+
+        // ✅ Save to MongoDB
+        await fetch('/api/profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newProfile),
+        });
+      } catch (err) {
+        console.error('GitHub API or DB Save Failed:', err);
       }
-    };
+    }
+  };
 
-    fetchGitHubProfile();
-  }, [session]);
+  fetchGitHubProfile();
+}, [session]);
+
 
   if (status === 'loading' || !profile) return <div className="text-center mt-20">Loading...</div>;
 

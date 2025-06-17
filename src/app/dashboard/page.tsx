@@ -9,8 +9,6 @@ export default function DashboardPage() {
   const router = useRouter();
 
   const [profile, setProfile] = useState<any>(null);
-  const [newQ, setNewQ] = useState('');
-  const [newA, setNewA] = useState('');
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/');
@@ -33,7 +31,6 @@ export default function DashboardPage() {
             language: 'English',
             skills: ['JavaScript', 'React'],
             learning: ['TypeScript'],
-            questions: [],
           };
           const res = await fetch('/api/profile', {
             method: 'POST',
@@ -49,100 +46,77 @@ export default function DashboardPage() {
     fetchProfile();
   }, [session]);
 
-  const handleAddQA = async () => {
-    if (!newQ.trim() || !newA.trim()) return;
-
-    const updatedQuestions = [...(profile?.questions || []), { q: newQ, a: newA }];
-    const updatedProfile = { ...profile, questions: updatedQuestions };
-
-    setProfile(updatedProfile);
-    setNewQ('');
-    setNewA('');
-
-    await fetch('/api/profile', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: profile.email, questions: updatedQuestions }),
-    });
-  };
-
   if (status === 'loading' || !profile) return <div className="text-center mt-20">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 dark:from-black dark:to-gray-900 py-12 px-4">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-
         {/* Profile Panel */}
-        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-md">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-lg">
           <div className="flex flex-col items-center text-center">
             <img
-              src={profile.image?.startsWith("http") ? profile.image : '/avatar-placeholder.png'}
+              src={profile.image?.startsWith('http') ? profile.image : '/avatar-placeholder.png'}
               alt="Profile"
-              className="w-24 h-24 rounded-full object-cover"
+              className="w-28 h-28 rounded-full object-cover shadow-md"
             />
-            <h2 className="mt-4 text-xl font-bold">{profile.name}</h2>
-            <p className="text-sm text-gray-500">@{profile.email?.split('@')[0]}</p>
+            <h2 className="mt-4 text-2xl font-extrabold text-gray-800 dark:text-white">{profile.name}</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">@{profile.email?.split('@')[0]}</p>
+            <a
+              href={`https://github.com/${profile.email?.split('@')[0]}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 text-xs mt-1 hover:underline"
+            >
+              View GitHub Profile
+            </a>
           </div>
 
-          <div className="mt-6 text-sm text-gray-700 dark:text-gray-300 space-y-1">
-            <p>📍 {profile.location}</p>
-            <p>🗣️ {profile.language}</p>
-            <p>🛠️ Skills: {profile.skills?.join(', ')}</p>
-            <p>🎓 Learning: {profile.learning?.join(', ')}</p>
+          <div className="mt-6 text-sm text-gray-700 dark:text-gray-300 space-y-2">
+            <p>📍 <span className="font-medium">Location:</span> {profile.location}</p>
+            <p>🗣️ <span className="font-medium">Language:</span> {profile.language}</p>
+            <p>🛠️ <span className="font-medium">Skills:</span> {profile.skills?.join(', ')}</p>
+            <p>🎯 <span className="font-medium">Learning:</span> {profile.learning?.join(', ')}</p>
           </div>
 
           <button
             onClick={() => signOut({ callbackUrl: '/' })}
-            className="mt-6 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
+            className="mt-8 w-full bg-red-500 text-white font-semibold py-2 rounded-lg hover:bg-red-600 transition"
           >
             Logout
           </button>
         </div>
 
-        {/* Q&A Section */}
-        <div className="md:col-span-2">
-          <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-md">
-            <h1 className="text-2xl font-semibold">Your Q&A Board</h1>
-            <p className="text-sm text-gray-500 mt-1">
-              Add questions and answers to showcase your knowledge.
-            </p>
+        {/* About Panel */}
+        <div className="md:col-span-2 bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-lg">
+          <h1 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">Welcome to Your Dashboard</h1>
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
+            Here’s your professional space to manage your tech presence. You can showcase your skills, what you’re learning,
+            and make updates to reflect your journey.
+          </p>
 
-            {/* Add Q&A */}
-            <div className="mt-6">
-              <h3 className="font-medium text-lg mb-2">Add New</h3>
-              <input
-                type="text"
-                placeholder="Your question..."
-                value={newQ}
-                onChange={(e) => setNewQ(e.target.value)}
-                className="w-full px-4 py-2 border rounded mb-2 dark:bg-neutral-800"
-              />
-              <textarea
-                placeholder="The answer..."
-                value={newA}
-                onChange={(e) => setNewA(e.target.value)}
-                className="w-full px-4 py-2 border rounded mb-2 dark:bg-neutral-800"
-              />
-              <button
-                onClick={handleAddQA}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-              >
-                Add Q&A
-              </button>
+          <div className="bg-gray-100 dark:bg-neutral-800 p-4 rounded-lg text-gray-700 dark:text-gray-300">
+            <p><strong>Bio:</strong> Passionate developer excited about creating meaningful web experiences. Always exploring new technologies and contributing to impactful projects.</p>
+          </div>
+
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+              <h3 className="font-semibold text-blue-700 dark:text-blue-300">💡 Skills</h3>
+              <ul className="mt-2 list-disc list-inside text-sm">
+                {profile.skills?.map((skill: string, idx: number) => (
+                  <li key={idx}>{skill}</li>
+                ))}
+              </ul>
             </div>
-
-            {/* Q&A List */}
-            <div className="mt-8 space-y-4">
-              {profile.questions?.map((item: any, idx: number) => (
-                <div key={idx} className="bg-gray-100 dark:bg-neutral-800 p-4 rounded">
-                  <p className="font-semibold text-blue-600">Q: {item.q}</p>
-                  <p className="mt-1 text-gray-700 dark:text-gray-300">A: {item.a}</p>
-                </div>
-              ))}
+            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+              <h3 className="font-semibold text-green-700 dark:text-green-300">📚 Learning</h3>
+              <ul className="mt-2 list-disc list-inside text-sm">
+                {profile.learning?.map((item: string, idx: number) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );

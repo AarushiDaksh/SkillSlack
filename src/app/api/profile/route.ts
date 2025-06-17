@@ -1,38 +1,45 @@
-// app/api/profile/route.ts
-import { connectDB } from '@/lib/mongodb';
-import UserProfile from '@/models/UserProfile';
 import { NextResponse } from 'next/server';
+import { connectDB } from '@/lib/mongodb';
+import Profile from '@/models/UserProfile';
 
 export async function GET(req: Request) {
   try {
+    const url = new URL(req.url);
+    const email = url.searchParams.get('email');
+
+    if (!email) {
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    }
+
     await connectDB();
-    const { searchParams } = new URL(req.url);
-    const email = searchParams.get('email');
+    const profile = await Profile.findOne({ email });
 
-    if (!email) return NextResponse.json({ error: 'Missing email' }, { status: 400 });
-
-    const profile = await UserProfile.findOne({ email });
     return NextResponse.json(profile || {});
   } catch (error) {
-    console.error("GET /api/profile error:", error);
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    console.error('GET /api/profile error:', error);
+    return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 });
   }
 }
 
 export async function POST(req: Request) {
   try {
-    await connectDB();
     const body = await req.json();
+    const { email } = body;
 
-    const profile = await UserProfile.findOneAndUpdate(
-      { email: body.email },
-      { $set: body },
-      { upsert: true, new: true }
-    );
+    if (!email) {
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+    }
+
+    await connectDB();
+
+    let profile = await Profile.findOne({ email });
+    if (!profile) {
+      profile = await Profile.create(body);
+    }
 
     return NextResponse.json(profile);
   } catch (error) {
-    console.error("POST /api/profile error:", error);
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    console.error('POST /api/profile error:', error);
+    return NextResponse.json({ error: 'Failed to save profile' }, { status: 500 });
   }
 }

@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-
   const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
@@ -15,33 +14,44 @@ export default function DashboardPage() {
   }, [status]);
 
   useEffect(() => {
-    const fetchGitHubProfile = async () => {
-      if (session?.user?.email) {
-        const username = session.user.email.split('@')[0];
-        try {
-          const res = await fetch(`https://api.github.com/users/${username}`);
-          const githubData = await res.json();
+    const fetchGitHubProfileAndSave = async () => {
+      if (!session?.user?.email) return;
 
-          const newProfile = {
-            email: session.user.email,
-            name: githubData.name || session.user.name,
-            image: githubData.avatar_url || session.user.image,
-            location: githubData.location || 'India',
-            language: 'English',
-            skills: ['JavaScript', 'React'],
-            learning: ['TypeScript'],
-          };
-          setProfile(newProfile);
-        } catch (err) {
-          console.error('GitHub API failed:', err);
-        }
+      const username = session.user.email.split('@')[0];
+
+      try {
+        const res = await fetch(`https://api.github.com/users/${username}`);
+        const githubData = await res.json();
+
+        const profilePayload = {
+          email: session.user.email,
+          name: githubData.name || session.user.name,
+          image: githubData.avatar_url || session.user.image,
+          bio: githubData.bio || '',
+          location: githubData.location || 'India',
+          language: 'English',
+          skills: ['JavaScript', 'React'],
+          learning: ['TypeScript'],
+        };
+
+        const saveRes = await fetch('/api/profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(profilePayload),
+        });
+
+        const saved = await saveRes.json();
+        setProfile(saved);
+      } catch (err) {
+        console.error('GitHub API or DB save failed:', err);
       }
     };
 
-    fetchGitHubProfile();
+    fetchGitHubProfileAndSave();
   }, [session]);
 
-  if (status === 'loading' || !profile) return <div className="text-center mt-20">Loading...</div>;
+  if (status === 'loading' || !profile)
+    return <div className="text-center mt-20">Loading...</div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 dark:from-black dark:to-gray-900 py-12 px-4">
@@ -90,7 +100,7 @@ export default function DashboardPage() {
           </p>
 
           <div className="bg-gray-100 dark:bg-neutral-800 p-4 rounded-lg text-gray-700 dark:text-gray-300">
-            <p><strong>Bio:</strong> Passionate developer excited about creating meaningful web experiences. Always exploring new technologies and contributing to impactful projects.</p>
+            <p><strong>Bio:</strong> {profile.bio || 'No bio available from GitHub.'}</p>
           </div>
 
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">

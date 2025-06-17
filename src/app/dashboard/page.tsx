@@ -15,35 +15,30 @@ export default function DashboardPage() {
   }, [status]);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchGitHubProfile = async () => {
       if (session?.user?.email) {
-        const res = await fetch(`/api/profile?email=${session.user.email}`);
-        const data = await res.json();
+        const username = session.user.email.split('@')[0];
+        try {
+          const res = await fetch(`https://api.github.com/users/${username}`);
+          const githubData = await res.json();
 
-        if (data && Object.keys(data).length > 0) {
-          setProfile(data);
-        } else {
           const newProfile = {
             email: session.user.email,
-            name: session.user.name,
-            image: session.user.image,
-            location: 'India',
+            name: githubData.name || session.user.name,
+            image: githubData.avatar_url || session.user.image,
+            location: githubData.location || 'India',
             language: 'English',
             skills: ['JavaScript', 'React'],
             learning: ['TypeScript'],
           };
-          const res = await fetch('/api/profile', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newProfile),
-          });
-          const created = await res.json();
-          setProfile(created);
+          setProfile(newProfile);
+        } catch (err) {
+          console.error('GitHub API failed:', err);
         }
       }
     };
 
-    fetchProfile();
+    fetchGitHubProfile();
   }, [session]);
 
   if (status === 'loading' || !profile) return <div className="text-center mt-20">Loading...</div>;
@@ -55,7 +50,7 @@ export default function DashboardPage() {
         <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 shadow-lg">
           <div className="flex flex-col items-center text-center">
             <img
-              src={profile.image?.startsWith('http') ? profile.image : '/avatar-placeholder.png'}
+              src={profile.image}
               alt="Profile"
               className="w-28 h-28 rounded-full object-cover shadow-md"
             />

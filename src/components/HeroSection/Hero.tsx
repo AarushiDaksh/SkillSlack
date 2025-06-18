@@ -20,16 +20,24 @@ interface HeroProps extends React.HTMLAttributes<HTMLDivElement> {
 const RetroGrid = () => {
   return (
     <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden [perspective:400px]">
-      {/* Animated dotted grid */}
+      {/* ✅ Square Grid Background */}
       <motion.div
         initial={{ opacity: 0, scale: 1.2 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 3, ease: "easeOut" }}
-        className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.08)_1px,transparent_1px)] dark:bg-[radial-gradient(circle,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:30px_30px] w-[600vw] h-[300vh] ml-[-200%]"
+        className="absolute inset-0 
+          bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] 
+          dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] 
+          bg-[size:30px_30px] 
+          w-[600vw] h-[300vh] ml-[-200%]"
       />
 
-      {/* Optional glowing center highlight */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[65vw] h-[65vh] rounded-full bg-[radial-gradient(circle,rgba(0,255,128,0.15)_0%,rgba(0,128,255,0.15)_70%,transparent_100%)] dark:bg-[radial-gradient(circle,rgba(0,255,128,0.2)_0%,rgba(0,128,255,0.2)_70%,transparent_100%)] blur-[120px]" />
+      {/* ✅ Glowing Center Highlight */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+        w-[65vw] h-[65vh] rounded-full 
+        bg-[radial-gradient(circle,rgba(0,255,128,0.15)_0%,rgba(0,128,255,0.15)_70%,transparent_100%)] 
+        dark:bg-[radial-gradient(circle,rgba(0,255,128,0.2)_0%,rgba(0,128,255,0.2)_70%,transparent_100%)] 
+        blur-[120px]" />
     </div>
   )
 }

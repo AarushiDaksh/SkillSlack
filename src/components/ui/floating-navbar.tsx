@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Menu, X } from "lucide-react";
-import { signIn } from "next-auth/react";
+
 import { useRouter } from "next/navigation";
 
 export const FloatingNav = ({
@@ -48,10 +48,7 @@ export const FloatingNav = ({
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  const handleLogin = async () => {
-   await signIn("github", { callbackUrl: "/dashboard" });
 
-  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -109,7 +106,7 @@ export const FloatingNav = ({
           <div className="flex items-center gap-2">
             {showThemeToggle && <ThemeToggle />}
             <button
-              onClick={handleLogin}
+              
               className="hidden sm:block border text-xs font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-3 py-1.5 rounded-full"
             >
               <span>Login</span>
@@ -155,7 +152,7 @@ export const FloatingNav = ({
               ))}
               <div className="pt-3 mt-1 border-t border-neutral-200 dark:border-neutral-800">
                 <button
-                  onClick={handleLogin}
+                 
                   className="w-full flex items-center justify-center text-sm font-medium bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-black dark:text-white px-3 py-2 rounded-lg transition-colors duration-150"
                 >
                   Login with GitHub

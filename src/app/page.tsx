@@ -1,82 +1,43 @@
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Hero } from "@/components/HeroSection/Hero";
-import { Button } from "@/components/ui/button";
-import { Header } from "@/components/Header";
-import HowItWorks from "@/components/HowItWorks/HowItWorks";
-import { WhyChooseUs } from "@/components/WhyChooseUs/WhyChooseUs";
-import { Testimonials } from "@/components/Testimonials/Testimonials";
-import ContactUs from "@/components/ContactUs";
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import SectionSpacer from "@/components/SectionSpacer";
+import { HeaderH } from "@/components/Header";
 import { ChatbotWidget } from "@/components/Chatbot/ChatbotWidget";
+import ShootingStars from "@/components/Background/ShootingStars";
 
-export default function Home() {
+
+export default async function Home() {
+
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Header */}
-      <Header />
+    <div className="flex flex-col min-h-screen bg-black text-white relative">
+      <ShootingStars />
+      <HeaderH />
 
-      {/* Hero Section */}
-              <main className="flex-1 ">
-       <Hero
-  title="Collaborative Skill Exchange Platform"
-  headline="Get Help, Give Help, and Grow Together"
-  subheading="SkillSwap connects developers and creators to share their skills, solve each other's problems, and earn community tokens through collaborative learning."
-  ctaText="Find Help"
-  ctaSecondaryText="Offer Help"
-  ctaHref="#find-help"
-  secondaryCtaHref="#offer-help"
-
-/>
-
-
-        <SectionSpacer>
-          <MaxWidthWrapper>
-            <div id="how-it-works">
-              <HowItWorks />
-            </div>
-          </MaxWidthWrapper>
-        </SectionSpacer>
-
-        <SectionSpacer size="none">
-          <MaxWidthWrapper>
-            <div id="community">
-              <WhyChooseUs />
-            </div>
-          </MaxWidthWrapper>
-        </SectionSpacer>
-
-        {/* <SectionSpacer>
-          <MaxWidthWrapper>
-            <Testimonials />
-          </MaxWidthWrapper>
-        </SectionSpacer> */}
-
-        <SectionSpacer only="bottom">
-          <MaxWidthWrapper>
-            <div id="contact">
-              <ContactUs />
-            </div>
-          </MaxWidthWrapper>
-        </SectionSpacer>
+      <main className="flex-1">
+        <Hero
+          title="Real-Time Dev Collaboration"
+          headline="Code. Collaborate. Connect."
+          subheading="SkillSlack is a developer-first workspace with real-time coding, terminal sessions, GitHub PR sync, and voice rooms — all in one place."
+          ctaText="Launch Workspace"
+          ctaSecondaryText="Try Editor"
+          ctaHref="/onboarding"
+          secondaryCtaHref="/playground"
+        />
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border">
+      <footer className="bg-white dark:bg-[#1e1f24] border-t border-gray-200 dark:border-white/10">
         <div className="flex flex-col md:flex-row justify-between items-center py-8 px-4 md:px-6 max-w-screen-xl mx-auto">
-          <div className="flex items-center gap-2 font-bold mb-4 md:mb-0">
-            <div className="size-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+          <div className="flex items-center gap-2 font-bold mb-4 md:mb-0 text-black dark:text-white">
+            <div className="size-6 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 text-white flex items-center justify-center text-xs">
               S
             </div>
-            <span>SkillSwap</span>
+            <span>SkillSlack</span>
           </div>
-          <p className="text-sm text-muted-foreground">
-            © 2025 SkillSwap By Aarushi. All rights reserved.
+
+          <p className="text-sm text-gray-600 dark:text-white/70">
+            © 2025 SkillSlack by Aarushi. All rights reserved.
           </p>
         </div>
       </footer>
 
-      {/* Chatbot Widget */}
       <ChatbotWidget />
     </div>
   );

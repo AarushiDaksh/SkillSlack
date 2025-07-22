@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ClientWrapper from "@/components/client-wrapper"; // import wrapper
+import { ClerkProvider } from "@clerk/nextjs";
+import ClientWrapper from "@/components/client-wrapper"; // includes ReduxProvider, UserSync, ThemeProvider, etc.
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,41 +24,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "SkillSwap | MarketPlace",
-  description:
-    "SkillSwap empowers individuals and businesses to securely resell unused software licenses. Join our marketplace and unlock hidden value with ease.",
-  keywords: ["SkillSwap"],
-  authors: [{ name: "SkillSwap Team" }],
-  creator: "SkillSwap",
-  publisher: "SkillSwap",
-  metadataBase: new URL("https://skillswap.io"),
-  openGraph: {
-    type: "website",
-    title: "SkillSwap | MarketPlace",
-    description: "Join SkillSwap.",
-    siteName: "SkillSwap",
-    images: [
-      {
-        url: "/images/skillswap-og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "SkillSwap Software Resell Platform",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "SkillSwap | Marketplace",
-    description: "Fast, secure, and smart.",
-    images: ["/images/skillswap-twitter-image.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  alternates: {
-    canonical: "/",
-  },
+  title: "SkillSlack",
+  creator: "Aarushi",
 };
 
 export default function RootLayout({
@@ -66,12 +34,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ClientWrapper>{children}</ClientWrapper>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <ClientWrapper>{children}</ClientWrapper>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

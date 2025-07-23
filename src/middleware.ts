@@ -8,6 +8,7 @@ export const middleware = clerkMiddleware((auth, req) => {
 });
 
 export const config = {
+  publicRoutes: ["/", "/sign-in", "/sign-up", "/splash"],
   matcher: [
     "/((?!_next|.*\\..*).*)", // Match except static files
   ],

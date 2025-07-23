@@ -23,6 +23,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.10.5",
+    "lottie-react": "^2.4.1",
     "lucide-react": "^0.509.0",
     "marked": "^4.3.0",
     "mongoose": "^8.15.2",

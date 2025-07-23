@@ -1,11 +1,10 @@
-'use client'
+'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { marked } from 'marked';
-import { SendIcon } from 'lucide-react';
+import { SendIcon, Plus, History } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface ChatMessage {
@@ -14,45 +13,57 @@ interface ChatMessage {
   timestamp: Date;
 }
 
-const SYSTEM_PROMPT = `You are SkillSwap's virtual assistant. Your goal is to provide helpful, accurate, and comprehensive information ONLY about SkillSwap's services.
+interface ChatSession {
+  id: string;
+  messages: ChatMessage[];
+  createdAt: Date;
+}
 
-ABOUT SKILLSWAP:
-- SkillSwap is a peer-to-peer platform for skill exchange, connecting learners and experts across domains.
-- Users can create skill listings, book sessions, and trade knowledge either for free or credits.
+const SYSTEM_PROMPT = `You are SkillSlack's virtual assistant. Your goal is to provide helpful, accurate, and platform-specific information ONLY about SkillSlack and its features.
+
+ABOUT SKILLSLACK:
+- SkillSlack is a developer-first workspace designed for real-time coding, collaboration, GitHub PR syncing, and live terminal/voice rooms.
+- It enables developers to create workspaces, invite team members, and collaborate using code editors, chat, and GitHub integration.
 
 KEY FEATURES:
-1. Skill Listings: Create detailed posts about skills you want to offer or learn.
-2. Book Sessions: Schedule 1-on-1 virtual sessions with verified mentors or peers.
-3. Earn Credits: Share your skills to earn platform credits that you can use to learn from others.
+1. Real-time Channels: Collaborate using text and code blocks inside team channels.
+2. GitHub PR Sync: Sync pull requests from linked GitHub repositories and get updates.
+3. Terminal Access: Share terminal sessions in real time during collaboration.
+4. Voice Rooms: Speak directly with team members using integrated voice chat.
+5. Workspace Invites: Create/join workspaces using unique invite links.
 
 INSTRUCTIONS:
-1. ONLY answer questions related to SkillSwap, skill exchange, credits, bookings, and community guidelines.
-2. If asked unrelated questions, politely respond: "I'm SkillSwap's assistant and only help with queries about skill sharing and our services. Want to explore how to earn credits or book a session?"
-3. Maintain friendly, clear, and platform-aligned communication.`;
+1. ONLY respond to questions related to SkillSlack, developer collaboration, real-time coding, GitHub integration, and workspace usage.
+2. If asked about unrelated topics, politely respond with: "I'm SkillSlack's assistant and I specialize in helping with developer collaboration features. Would you like to learn about GitHub PR sync or real-time channels?"
+3. Maintain a helpful, tech-savvy, and concise tone.`;
 
 const EXAMPLE_QUESTIONS = [
-  'How do I book a session?',
-  'How can I earn credits on SkillSwap?',
-  'What skills can I list?',
-  'Is SkillSwap free to use?',
-  'How are mentors verified?'
+  'How do I create a new workspace?',
+  'Can I share my terminal with others?',
+  'How does GitHub PR sync work?',
+  'Can I invite teammates to SkillSlack?',
+  'What are voice rooms in SkillSlack?'
 ];
 
+const initialBotMsg: ChatMessage = {
+  content: "👋 Hi there! I'm SkillSlack's assistant. Ask me anything about workspaces, GitHub sync, voice rooms, or coding with your team in real-time.",
+  isUser: false,
+  timestamp: new Date(),
+};
+
 const ChatBot = () => {
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
-    {
-      content: "👋 Hello! I'm SkillSwap's assistant here to help you learn or share skills. I can answer your questions about how to earn credits, list your expertise, book a session, or use the SkillSwap platform. Ready to swap some skills?",
-      isUser: false,
-      timestamp: new Date(),
-    },
+  const [sessions, setSessions] = useState<ChatSession[]>([
+    { id: 'session-1', messages: [initialBotMsg], createdAt: new Date() },
   ]);
+  const [currentSessionId, setCurrentSessionId] = useState('session-1');
   const [userInput, setUserInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const messageContainerRef = useRef<HTMLDivElement>(null);
-  const userInputRef = useRef<HTMLTextAreaElement>(null);
+
   const generativeClient = useRef<GoogleGenerativeAI | null>(null);
   const modelRef = useRef<any>(null);
   const chatRef = useRef<any>(null);
+
+  const currentSession = sessions.find((s) => s.id === currentSessionId)!;
 
   useEffect(() => {
     const apiKey = process.env.NEXT_PUBLIC_API_KEY;
@@ -68,76 +79,176 @@ const ChatBot = () => {
   const sendMessage = async () => {
     const message = userInput.trim();
     if (!message) return;
-    const newUserMsg: ChatMessage = { content: message, isUser: true, timestamp: new Date() };
-    setChatHistory(prev => [...prev, newUserMsg]);
+
+    const newUserMsg: ChatMessage = {
+      content: message,
+      isUser: true,
+      timestamp: new Date(),
+    };
+
+    updateSessionMessages([...currentSession.messages, newUserMsg]);
     setUserInput('');
     setIsTyping(true);
 
     try {
       const result = await chatRef.current.sendMessageStream(message);
-      let fullResponse = "";
+      let fullResponse = '';
       for await (const chunk of result.stream) {
-        const text = chunk.text ? chunk.text() : "";
+        const text = chunk.text ? chunk.text() : '';
         fullResponse += text;
-        setChatHistory(prev => {
-          const lastMsg = prev[prev.length - 1];
-          if (!lastMsg.isUser) {
-            const updated = [...prev];
-            updated[prev.length - 1] = { ...lastMsg, content: marked(fullResponse) };
+
+        updateSessionMessages((prevMsgs) => {
+          const last = prevMsgs[prevMsgs.length - 1];
+          if (!last.isUser) {
+            const updated = [...prevMsgs];
+            updated[prevMsgs.length - 1] = {
+              ...last,
+              content: marked(fullResponse),
+              timestamp: new Date(),
+            };
             return updated;
           }
-          return [...prev, { content: marked(fullResponse), isUser: false, timestamp: new Date() }];
+          return [...prevMsgs, {
+            content: marked(fullResponse),
+            isUser: false,
+            timestamp: new Date(),
+          }];
         });
       }
     } catch (err) {
-      setChatHistory(prev => [...prev, { content: "Oops! Something went wrong. Please try again.", isUser: false, timestamp: new Date() }]);
+      updateSessionMessages([
+        ...currentSession.messages,
+        { content: "⚠️ Something went wrong. Try again.", isUser: false, timestamp: new Date() },
+      ]);
     } finally {
       setIsTyping(false);
     }
   };
 
-  return (
-    <div className="flex flex-col h-full">
-      <div ref={messageContainerRef} className="flex-1 overflow-y-auto p-4 space-y-3">
-        {chatHistory.map((msg, idx) => (
-          <div key={idx} className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[80%] px-3 py-2 rounded-lg text-sm ${msg.isUser ? 'bg-primary text-white' : 'bg-muted text-foreground'}`}>
-              <div dangerouslySetInnerHTML={{ __html: marked(msg.content) }} />
-            </div>
-          </div>
-        ))}
-        {isTyping && <Skeleton className="w-16 h-4" />}
-      </div>
+  const updateSessionMessages = (newMessages: ChatMessage[] | ((prev: ChatMessage[]) => ChatMessage[])) => {
+    setSessions((prevSessions) =>
+      prevSessions.map((session) =>
+        session.id === currentSessionId
+          ? { ...session, messages: typeof newMessages === 'function' ? newMessages(session.messages) : newMessages }
+          : session
+      )
+    );
+  };
 
-      <div className="p-3 bg-background border-t border-border">
-        <form onSubmit={(e) => { e.preventDefault(); sendMessage(); }} className="flex gap-2">
-          <Textarea
-            ref={userInputRef}
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-            placeholder="Ask something about SkillSwap..."
-            className="flex-1 text-sm"
-          />
-          <Button type="submit" disabled={isTyping || !userInput.trim()} size="icon">
-            <SendIcon className="w-4 h-4" />
+  const handleNewChat = () => {
+    const newId = `session-${Date.now()}`;
+    const newSession: ChatSession = {
+      id: newId,
+      messages: [initialBotMsg],
+      createdAt: new Date(),
+    };
+    setSessions([newSession, ...sessions]);
+    setCurrentSessionId(newId);
+    setUserInput('');
+    setIsTyping(false);
+  };
+
+return (
+  <div className=" max-h-[90vh] flex flex-col border border-border bg-background rounded-xl shadow-xl overflow-hidden">
+
+    {/* Top Bar */}
+    <div className="p-3 border-b border-border flex items-center justify-between bg-background">
+      <h2 className="text-sm font-semibold">SkillSlack Assistant</h2>
+      <Button
+        onClick={handleNewChat}
+        variant="secondary"
+        size="sm"
+        className="rounded-full px-3 py-1 text-xs shadow hover:bg-muted"
+      >
+        <Plus className="w-4 h-4 mr-1" /> New Chat
+      </Button>
+    </div>
+
+    {/* Messages */}
+    <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-background">
+      {currentSession.messages.map((msg, idx) => (
+        <div key={idx} className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'}`}>
+        <div
+          className={`max-w-[80%] px-4 py-2 rounded-xl text-sm leading-relaxed shadow ${
+            msg.isUser
+              ? 'bg-primary text-primary-foreground dark:bg-indigo-500 dark:text-white rounded-br-none'
+              : 'bg-muted text-foreground dark:bg-zinc-800 dark:text-white rounded-bl-none'
+          }`}
+        >
+
+
+            <div dangerouslySetInnerHTML={{ __html: marked(msg.content) }} />
+          </div>
+        </div>
+      ))}
+      {isTyping && <Skeleton className="w-16 h-4" />}
+    </div>
+
+    {/* Input and Quick Questions */}
+    <div className="p-3 border-t border-border bg-background">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          sendMessage();
+        }}
+        className="flex items-center gap-2"
+      >
+        <Textarea
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+          placeholder="Ask about GitHub sync, terminal sharing, voice rooms..."
+          className="flex-1 text-sm rounded-xl resize-none shadow 
+                    text-white placeholder:text-gray-400 bg-zinc-900 dark:bg-zinc-900 dark:text-white dark:placeholder:text-gray-400"
+        />
+
+
+        <Button type="submit" disabled={isTyping || !userInput.trim()} size="icon" className="rounded-full">
+          <SendIcon className="w-4 h-4" />
+        </Button>
+      </form>
+
+      <div className="flex flex-wrap gap-2 mt-3">
+        {EXAMPLE_QUESTIONS.map((q, i) => (
+          <Button
+            key={i}
+            variant="outline"
+            size="sm"
+            className="text-xs rounded-full"
+            onClick={() => {
+              setUserInput(q);
+              sendMessage();
+            }}
+          >
+            {q}
           </Button>
-        </form>
-        <div className="flex flex-wrap gap-2 mt-2">
-          {EXAMPLE_QUESTIONS.map((q, i) => (
+        ))}
+      </div>
+    </div>
+
+    {/* Session History */}
+    {sessions.length > 1 && (
+      <div className="p-2 bg-muted border-t border-border">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium mb-1">
+          <History className="w-3 h-3" />
+          Previous Chats
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {sessions.map((session) => (
             <Button
-              key={i}
-              variant="outline"
+              key={session.id}
+              variant={session.id === currentSessionId ? 'default' : 'outline'}
               size="sm"
-              className="text-xs"
-              onClick={() => { setUserInput(q); sendMessage(); }}
+              className="text-xs rounded-full"
+              onClick={() => setCurrentSessionId(session.id)}
             >
-              {q}
+              {new Date(session.createdAt).toLocaleTimeString()}
             </Button>
           ))}
         </div>
       </div>
-    </div>
-  );
-};
+    )}
+  </div>
+);
+}
 
 export default ChatBot;

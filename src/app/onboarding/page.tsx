@@ -32,6 +32,8 @@ export default function SkillSlackDashboard() {
   const [inviteLink, setInviteLink] = useState("");
   const { user, isLoaded, isSignedIn } = useUser();
   const [showSidebar, setShowSidebar] = useState(false);
+  const [workspaceName, setWorkspaceName] = useState("");
+
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
@@ -77,7 +79,7 @@ export default function SkillSlackDashboard() {
       {/* Mobile Toggle Button */}
       <button
         onClick={() => setShowSidebar(!showSidebar)}
-        className="md:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-[#1b1d23] text-white shadow-lg"
+        className="md:hidden fixed top-4 right-4 z-50 p-2 rounded-md bg-[#1b1d23] text-white shadow-lg"
       >
         <Menu size={20} />
       </button>
@@ -148,21 +150,30 @@ export default function SkillSlackDashboard() {
     </div>
   </div>
 
-  {/* Bottom-fixed Button */}
-  <div className="p-6 border-t border-white/10 bg-[#1b1d23] flex-none">
-    <button
-      onClick={createWorkspace}
-      className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md text-sm font-semibold flex items-center justify-center gap-2 shadow-md"
-    >
-      <Plus size={16} /> Create Workspace
-    </button>
-  </div>
+      {/* {Bottom-fixed Button */}
+    <div className="p-6 border-t border-white/10 bg-[#1b1d23] flex-none space-y-3">
+      <input
+        type="text"
+        value={workspaceName}
+        onChange={(e) => setWorkspaceName(e.target.value)}
+        placeholder="Enter workspace name"
+        className="w-full px-3 py-2 rounded-md bg-[#2a2d36] border border-white/10 text-sm placeholder-white/40 text-white focus:outline-none focus:ring focus:ring-purple-500"
+      />
+
+      <button
+        onClick={createWorkspace}
+        className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md text-sm font-semibold flex items-center justify-center gap-2 shadow-md"
+        disabled={!workspaceName.trim()}
+      >
+        <Plus size={16} /> Create Workspace
+      </button>
+</div>
 </aside>
 
 
       {/* Main Content */}
       <main className="flex-1 p-6 md:p-10 overflow-y-auto bg-gradient-to-br from-[#111318] to-[#1a1c22] min-h-screen">
-        <h1 className="text-3xl font-bold mb-6 text-purple-300 drop-shadow mt-6">
+        <h1 className="text-3xl font-bold mb-6 text-purple-300 drop-shadow">
           Create workspace and start building.
         </h1>
 

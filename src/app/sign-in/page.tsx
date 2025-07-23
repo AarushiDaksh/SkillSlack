@@ -12,6 +12,7 @@ export default function SignInPage() {
     >
       <div className="rounded-xl border p-6 bg-white dark:bg-black shadow-xl">
         <SignIn
+          redirectUrl="/splash"
           path="/sign-in"
           routing="path"
           signUpUrl="/sign-up"

@@ -72,7 +72,7 @@ export function GitHubPRFeed() {
       href={pr.html_url}
       target="_blank"
       rel="noopener noreferrer"
-      className="rounded-xl border border-white/10 bg-zinc-900 hover:bg-zinc-800 p-5 shadow-sm transition-all duration-200 hover:shadow-lg flex flex-col justify-between"
+      className="rounded-xl border bg-[#f5f5f5] dark:bg-blac p-5 shadow-sm transition-all duration-200 hover:shadow-lg flex flex-col justify-between"
     >
       {/* Header Row */}
       <div className="flex justify-between items-center mb-2">
@@ -85,7 +85,7 @@ export function GitHubPRFeed() {
       </div>
 
       {/* Title */}
-      <h3 className="text-md font-semibold text-white mb-2 line-clamp-2">
+      <h3 className="text-md font-semibold text-black dark:text-white mb-2 line-clamp-2">
         {pr.title}
       </h3>
 

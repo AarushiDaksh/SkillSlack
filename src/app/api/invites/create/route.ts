@@ -2,7 +2,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
 import { connect as connect } from "@/utils/db";
-import { Invite } from "@/models/Invite";
+import Invite  from "@/models/Invite";
 import { Workspace } from "@/models/Workspace";
 import { generateInviteCode } from "@/lib/invites";
 import { Types } from "mongoose";

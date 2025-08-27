@@ -2,7 +2,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
 import { connect } from "@/utils/db";
-import {Invite} from "@/models/Invite";            // ← default export
+import Invite from "@/models/Invite";            // ← default export
 import {Workspace} from "@/models/Workspace";      // ← if yours is a named export, change to:  import { Workspace } from "@/models/Workspace";
 import mongoose from "mongoose";
 

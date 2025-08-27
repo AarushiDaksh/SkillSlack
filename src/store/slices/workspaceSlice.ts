@@ -2,6 +2,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface WorkspaceState {
+  id: any;
   _id: any;
   name: string;
   workspace: {
@@ -14,7 +15,8 @@ interface WorkspaceState {
 const initialState: WorkspaceState = {
   workspace: null,
   name: "",
-  _id: undefined
+  _id: undefined,
+  id: undefined
 };
 
 export const workspaceSlice = createSlice({

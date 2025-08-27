@@ -21,7 +21,7 @@ export default function DashboardPage() {
     <div className="p-4">
       {/* Header bar with back & user buttons */}
       <div className="flex justify-between items-center mb-6">
-        {/* Themed Go Back Button */}
+     
         <Button variant="outline" onClick={() => router.push("/")}>
           ← Go Back
         </Button>

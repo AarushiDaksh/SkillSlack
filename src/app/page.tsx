@@ -20,7 +20,7 @@ export default async function Home() {
           subheading="SkillSlack is a developer-first workspace with real-time coding, terminal sessions, GitHub PR sync, and voice rooms — all in one place."
           ctaText="Launch Workspace"
           ctaSecondaryText="PR"
-          ctaHref="/onboarding"
+          ctaHref="/sign-in"
           secondaryCtaHref="/pull"
         />
         

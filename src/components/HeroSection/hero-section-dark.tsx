@@ -44,12 +44,12 @@ const HeroSection = React.forwardRef<HTMLDivElement, HeroProps>(
     {
       className,
       title = "Real-Time Dev Collaboration",
-      headline = "Code. Collaborate. Connect.",
-      subheading = "SkillSlack is a developer-first workspace with real-time coding, terminal sessions, GitHub PR sync, and voice rooms — all in one place.",
-      ctaText = "Launch Workspace",
-      ctaSecondaryText = "Try Editor",
-      ctaHref = "/onboarding",
-      secondaryCtaHref = "/playground",
+      headline="Code. Collaborate. Connect.",
+      subheading="SkillSlack is a developer-first workspace with real-time coding, terminal sessions, GitHub PR sync, and voice rooms — all in one place.",
+      ctaText="Launch Workspace",
+      ctaSecondaryText="PR",
+      ctaHref="/sign-in",
+          secondaryCtaHref="/pull",
       ...props
     },
     ref

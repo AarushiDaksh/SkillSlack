@@ -26,7 +26,7 @@ const Hero = React.forwardRef<HTMLDivElement, HeroProps>(
       subheading = "SkillSlack connects developers and creators to share their skills, solve each other's problems, and earn community tokens through collaborative learning.",
       ctaText = "Find Help",
       ctaSecondaryText = "Offer Help",
-      ctaHref = "#find-help",
+      ctaHref = "",
       secondaryCtaHref = "#offer-help",
       ...props
     },

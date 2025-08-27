@@ -1,21 +1,30 @@
-import { NextRequest, NextResponse } from "next/server";
-import { connect } from "@/utils/db";
-import {Workspaces} from "@/models/Workspace";
+import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
+import { connect as connect } from "@/utils/db";
+import { Workspace } from "@/models/Workspace";
 
-export async function POST(req: NextRequest) {
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+export async function POST(req: Request) {
   try {
+    const { userId } = auth();
+    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
     await connect();
-    const { name, userId } = await req.json();
 
-    if (!name || !userId) {
-      return NextResponse.json({ success: false, error: "Missing fields" }, { status: 400 });
-    }
+    const { name } = (await req.json()) as { name?: string };
+    if (!name?.trim()) return NextResponse.json({ error: "name required" }, { status: 400 });
 
-    const newWorkspace = await Workspaces.create({ name, createdBy: userId });
+    const workspace = await Workspace.create({
+      name: name.trim(),
+      ownerId: userId,
+      members: [userId],
+    });
 
-    return NextResponse.json({ success: true, workspace: newWorkspace }, { status: 201 });
+    return NextResponse.json({ success: true, workspace }, { status: 201 });
   } catch (err) {
-    console.error("Workspace creation error:", err);
-    return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
+    console.error("WORKSPACE_CREATE_ERROR", err);
+    return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }

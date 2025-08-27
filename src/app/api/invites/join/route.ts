@@ -1,48 +1,69 @@
-import { connect } from "@/utils/db";
-import  Invite  from "@/models/invite";
-import { User } from "@/models/User";
-import { Workspaces } from "@/models/Workspace";
+// app/api/join/route.ts
+import { NextResponse, NextRequest } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
+import { connect } from "@/utils/db";
+import {Invite} from "@/models/Invite";            // ← default export
+import {Workspace} from "@/models/Workspace";      // ← if yours is a named export, change to:  import { Workspace } from "@/models/Workspace";
+import mongoose from "mongoose";
 
-export async function POST(req: Request) {
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+export async function POST(req: NextRequest) {
+  // Auth
+  const { userId } = getAuth(req);
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Parse body
+  let body: any = {};
+  try {
+    body = await req.json();
+  } catch {
+    /* ignore */
+  }
+  const code = typeof body?.code === "string" ? body.code.trim() : "";
+  if (!code) {
+    return NextResponse.json({ error: "code required" }, { status: 400 });
+  }
+
   await connect();
 
-  const { userId: clerkId } = getAuth(req as any);
-  const { token } = await req.json();
-
-  if (!token || !clerkId) {
-    return new Response(JSON.stringify({ error: "Missing token or auth" }), { status: 400 });
+  // Find invite (no .lean() so TS keeps schema typing)
+  const invite = await Invite.findOne({ code });
+  if (!invite || invite.active === false) {
+    return NextResponse.json({ error: "Invalid invite" }, { status: 404 });
   }
 
-  try {
-    const invite = await Invite.findOne({ token });
-    if (!invite) {
-      return new Response(JSON.stringify({ error: "Invalid or expired invite" }), { status: 400 });
-    }
-
-    const mongoUser = await User.findOne({ clerkId });
-    if (!mongoUser) {
-      return new Response(JSON.stringify({ error: "User not found" }), { status: 404 });
-    }
-
-    const workspace = await Workspaces.findById(invite.workspaceId);
-    if (!workspace) {
-      return new Response(JSON.stringify({ error: "Workspace not found" }), { status: 404 });
-    }
-
-    // Prevent duplicate joins
-    if (!workspace.members.includes(mongoUser._id)) {
-      workspace.members.push(mongoUser._id);
-      await workspace.save();
-    }
-
-    return new Response(JSON.stringify({
-      success: true,
-      message: "Joined workspace successfully"
-    }), { status: 200 });
-
-  } catch (error) {
-    console.error("Join error:", error);
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
+  // Expiry check
+  if (invite.expiresAt && invite.expiresAt.getTime() < Date.now()) {
+    return NextResponse.json({ error: "Invite expired" }, { status: 410 });
   }
+
+  // Validate workspace id
+  const wsId = invite.workspaceId?.toString?.() ?? "";
+  if (!mongoose.Types.ObjectId.isValid(wsId)) {
+    return NextResponse.json({ error: "Workspace not found" }, { status: 404 });
+  }
+
+  // Load workspace
+  const ws = await Workspace.findById(wsId);
+  if (!ws) {
+    return NextResponse.json({ error: "Workspace not found" }, { status: 404 });
+  }
+
+  // Ensure members array exists
+  if (!Array.isArray(ws.members)) {
+    ws.members = [];
+  }
+
+  // Add member if not already present
+  const alreadyMember = ws.ownerId === userId || ws.members.includes(userId);
+  if (!alreadyMember) {
+    ws.members = Array.from(new Set([...ws.members, userId]));
+    await ws.save();
+  }
+
+  return NextResponse.json({ success: true, workspaceId: ws._id.toString() });
 }

@@ -1,25 +1,15 @@
-// src/models/Invite.ts
-import { Schema, model, models, Types } from "mongoose";
+import mongoose, { Schema, InferSchemaType, model, models } from "mongoose";
 
-export interface IInvite {
-  code: string;
-  workspaceId: Types.ObjectId;
-  createdBy: string;
-  isActive: boolean;
-  expiresAt?: Date | null;
-}
-
-const InviteSchema = new Schema<IInvite>(
+const InviteSchema = new Schema(
   {
-    code: { type: String, required: true },
-    workspaceId: { type: Schema.Types.ObjectId, ref: "Workspace", required: true },
-    createdBy: { type: String, required: true },
+    code: { type: String, required: true, unique: true, index: true },
     isActive: { type: Boolean, default: true },
-    expiresAt: { type: Date, default: null },
+    workspaceId: { type: Schema.Types.ObjectId, ref: "Workspace", required: true },
+    createdBy: { type: String, required: true }, // clerkId or user id
+    expiresAt: { type: Date }
   },
   { timestamps: true }
 );
 
-InviteSchema.index({ code: 1 }, { unique: true });
-
-export const Invite = models.Invite || model<IInvite>("Invite", InviteSchema);
+export type InviteDoc = InferSchemaType<typeof InviteSchema>;
+export const Invite = models.Invite || model("Invite", InviteSchema);

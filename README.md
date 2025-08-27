@@ -1,6 +1,6 @@
 # 🚀 SkillSlack – Developer-first Collaboration Platform
 
-SkillSlack is a real-time, full-stack workspace for developers to **code, collaborate, and connect** — all in one place.
+SkillSlack is a real-time, full-stack workspace for developers to **code, collaborate, and connect** — all in one place
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/e28306c0-95df-4fac-9161-6537d0973d1f" alt="Dashboard Screenshot" width="800" />

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utlis";
 
 
 
@@ -53,12 +53,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({
           <ThemeToggle />
          
 
-        <button
-          onClick={() => router.push("/sign-in")}
-          className="px-3 py-1 rounded-full border border-neutral-300 dark:border-white/20 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/10 transition"
-        >
-          Login
-        </button>
+       
 
         </div>
       </motion.div>

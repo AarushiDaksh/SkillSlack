@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utlis'
 import { ReactNode } from 'react'
 
 type WrapperSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';

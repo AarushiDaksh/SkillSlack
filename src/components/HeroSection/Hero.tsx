@@ -1,62 +1,98 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { RetroGrid } from "@/components/magicui/retro-grid";
+import * as React from "react";
+import { cn } from "@/lib/utlis";
+import { ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {RetroGrid}  from "@/components/magicui/retro-grid";
 
 
 interface HeroProps extends React.HTMLAttributes<HTMLDivElement> {
-  title?: string
-  headline?: string
-  subheading?: string
-  ctaText?: string
-  ctaSecondaryText?: string
-  ctaHref?: string
-  secondaryCtaHref?: string
+  title?: string;
+  headline?: string;
+  subheading?: string;
+  ctaText?: string;
+  ctaHref?: string;
 }
 
 const Hero = React.forwardRef<HTMLDivElement, HeroProps>(
   (
     {
       className,
-      title = "Collaborative Skill Exchange Platform",
-      headline = "Get Help, Give Help, and Grow Together",
-      subheading = "SkillSlack connects developers and creators to share their skills, solve each other's problems, and earn community tokens through collaborative learning.",
-      ctaText = "Find Help",
-      ctaSecondaryText = "Offer Help",
-      ctaHref = "",
-      secondaryCtaHref = "#offer-help",
+      title = "GitHub PR Sync",
+      headline = "Track. Review. Merge.",
+      subheading = "Stay on top of your GitHub Pull Requests in one place — fast, focused, and real-time.",
+      ctaText = "View PRs",
+      ctaHref = "/pull",
       ...props
     },
     ref,
   ) => {
     return (
-      <div className={cn("relative min-h-screen", className)} ref={ref} {...props}>
+      <div
+        className={cn(
+          "relative min-h-screen overflow-hidden",
+          "bg-white text-black dark:bg-[#0a0b0f] dark:text-white",
+          className
+        )}
+        ref={ref}
+        {...props}
+      >
+        {/* Light background (keep original look) */}
+        <div className="absolute top-0 z-0 h-full w-full bg-[#f5f5f5] dark:hidden" />
 
+        {/* Dark background */}
+        <div className="absolute top-0 z-0 hidden h-full w-full dark:block bg-[#0a0b0f]" />
+
+        {/* GRID: now visible in both themes */}
         <div
-            className="absolute top-0 z-[0] h-screen w-full bg-white bg-[url('https://raw.githubusercontent.com/AarushiDaksh/assets/main/skillswap-light.png')] bg-cover bg-center dark:hidden"
-            style={{
-              backgroundBlendMode: "screen",
-              backgroundColor: "#f5f5f5",
-            }}
-          />
+          className={cn(
+            "absolute inset-0 z-[1] pointer-events-none",
+            // Light: very subtle gray lines
+            "bg-[linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)]",
+            "bg-[size:36px_36px]",
+            // Dark: brighter grid
+            "dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.07)_1px,transparent_1px)]",
+            "dark:bg-[size:34px_34px]"
+          )}
+        />
 
-         
-          
-                  <section className="relative max-w-full mx-auto z-1 min-h-screen flex items-center">
-          <div className="max-w-screen-xl z-10 mx-auto px-4 py-20 md:px-8 w-full">
-            <div className="space-y-5 max-w-3xl leading-0 lg:leading-5 mx-auto text-center">
+        {/* Depth grid (RetroGrid) */}
+        <div className="absolute inset-0 z-[1] opacity-10 dark:opacity-30 pointer-events-none">
+          <RetroGrid />
+        </div>
 
-              {/* Gradient headline */}
-              <h2 className="text-4xl tracking-tighter font-bold bg-clip-text text-transparent mx-auto md:text-6xl 
-                bg-gradient-to-r from-black to-gray-700 dark:from-purple-300 dark:to-blue-200">
+        {/* Glow (only in dark) */}
+        <div className="hidden dark:block absolute -top-40 left-1/2 -translate-x-1/2 size-[110vmin] rounded-full blur-[120px] opacity-40 z-[1]
+                        bg-[radial-gradient(circle,rgba(124,58,237,.35),rgba(56,189,248,.25),transparent)]" />
+
+        {/* Content */}
+        <section className="relative z-10 max-w-full mx-auto min-h-screen flex items-center">
+          <div className="max-w-screen-xl mx-auto px-4 py-20 md:px-8 w-full">
+            <div className="space-y-6 max-w-3xl mx-auto text-center">
+              {/* label */}
+              <h1
+                className="inline-flex items-center justify-center gap-2 mx-auto rounded-full px-5 py-2 text-xs md:text-sm
+                           border border-black/10 bg-white/60 text-gray-700
+                           backdrop-blur dark:border-white/15 dark:bg-white/5 dark:text-white/80"
+              >
+                {title}
+                <ChevronRight className="inline w-4 h-4 opacity-70" />
+              </h1>
+
+              {/* headline */}
+              <h2
+                className="text-4xl md:text-6xl font-extrabold tracking-tight mx-auto
+                           bg-clip-text text-transparent
+                           bg-[linear-gradient(180deg,#000_0%,rgba(0,0,0,.75)_100%)]
+                           dark:bg-[linear-gradient(90deg,#a78bfa_0%,#60a5fa_50%,#22d3ee_100%)]
+                           drop-shadow-[0_0_30px_rgba(59,130,246,.15)]"
+              >
                 {headline.split(" ").map((word, i, arr) =>
                   i >= arr.length - 2 ? (
                     <span
                       key={i}
-                      className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-cyan-500 dark:from-purple-300 dark:to-blue-200"
+                      className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 via-indigo-300 to-cyan-300"
                     >
                       {word}{" "}
                     </span>
@@ -66,46 +102,38 @@ const Hero = React.forwardRef<HTMLDivElement, HeroProps>(
                 )}
               </h2>
 
-              {/* Subheading */}
-              <p className="max-w-2xl mx-auto text-gray-600 dark:text-gray-300 text-base leading-relaxed px-4">
+              {/* subheading */}
+              <p className="max-w-2xl mx-auto text-gray-700 dark:text-white/70 text-base md:text-lg leading-relaxed px-2">
                 {subheading}
               </p>
 
-              {/* Title label */}
-              <h1 className="text-sm text-gray-600 dark:text-gray-400 group font-medium mx-auto px-5 py-2 bg-gradient-to-tr from-zinc-300/20 via-purple-400/20 to-transparent dark:from-zinc-300/5 dark:via-purple-400/5 border-[2px] border-black/5 dark:border-white/5 rounded-3xl w-fit">
-                {title}
-                <ChevronRight className="inline w-4 h-4 ml-2 group-hover:translate-x-1 duration-300" />
-              </h1>
-
-              {/* CTA Buttons */}
-              <div className="items-center justify-center gap-x-4 space-y-3 sm:flex sm:space-y-0 pt-8">
+              {/* CTA */}
+              <div className="pt-6">
                 <Button
-                size="lg"
-                className="px-8 w-full sm:w-auto text-white dark:text-white bg-gradient-to-r from-purple-500 to-blue-500 hover:opacity-90"
-                asChild
-              >
-                <a href={ctaHref}>{ctaText}</a>
-              </Button>
-
-              <Button
-                size="lg"
-                variant="outline"
-                className="px-8 w-full sm:w-auto mt-4 sm:mt-0 text-black dark:text-white border-black dark:border-white hover:bg-black/5 dark:hover:bg-white/10"
-                asChild
-              >
-                <a href={secondaryCtaHref}>{ctaSecondaryText}</a>
-              </Button>
-
+                  size="lg"
+                  className={cn(
+                    "px-8 font-semibold",
+                    "text-white bg-gradient-to-r from-purple-600 to-blue-600",
+                    "hover:opacity-95",
+                    "dark:shadow-[0_0_25px_rgba(99,102,241,.35)] dark:hover:shadow-[0_0_40px_rgba(99,102,241,.5)]",
+                    "transition-shadow duration-300 relative"
+                  )}
+                  asChild
+                >
+                  <a href={ctaHref}>{ctaText}</a>
+                </Button>
               </div>
 
+              <div className="mx-auto mt-8 h-px w-32
+                              bg-gradient-to-r from-transparent via-black/30 to-transparent
+                              dark:from-transparent dark:via-cyan-300/40 dark:to-transparent" />
             </div>
           </div>
         </section>
       </div>
-      
-    )
+    );
   },
-)
+);
 
-Hero.displayName = "Hero"
-export { Hero }
+Hero.displayName = "Hero";
+export { Hero };

@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utlis'
 import { motion } from "framer-motion"
 
 interface LinesPatternCardProps {

@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ChatBot from "./ChatBot";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utlis";
 
 export function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);

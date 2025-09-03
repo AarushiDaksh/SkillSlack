@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utlis'
 import { ReactNode } from 'react'
 
 type SpacingSize = 'none' | 'xs' | 'small' | 'medium' | 'large' | 'xl';

@@ -1,90 +1,46 @@
-# 🚀 SkillSlack – Developer-first Collaboration Platform
+# GitHub PR Feed
 
-SkillSlack is a real-time, full-stack workspace for developers to **code, collaborate, and connect** — all in one place
-
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/e28306c0-95df-4fac-9161-6537d0973d1f" alt="Dashboard Screenshot" width="800" />
-  <img src="https://github.com/user-attachments/assets/c89c4a6e-1d08-4d35-bec0-412a268206aa" alt="GitHub PR Feed" width="800" />
-  <img src="https://github.com/user-attachments/assets/cbe49bd6-2b96-4370-800d-3f886f42a527" alt="Workspace Invite" width="800" />
-</p>
-
-From **interactive coding channels** to **GitHub PR sync**, **terminal collab**, and **voice rooms**, SkillSlack empowers dev teams with tools they actually need.
+A sleek web application that allows developers to **explore and contribute** to GitHub projects through an **integrated Pull Request viewer**.  
+Designed for simplicity, performance, and clarity — empowering contributors to stay updated on project PRs effortlessly.
 
 ---
 
-## 🌟 Features
+## Features
 
-### 🧑‍💻 Workspaces
-- Create or join developer-focused workspaces
-- Share invite links with collaborators
-
-### 💬 Real-time Collaboration
-- Group & private messaging (DMs + Channels)
-- Live code editing using **Monaco Editor**
-- Terminal pairing sessions with **Xterm.js**
-
-### 🔗 GitHub PR Sync
-- Fetch PRs in real-time from GitHub
-- View title, number, status, author & date
-- Animated PR feed powered by **Lottie**
-
-### 🧠 AI Assistant
-- Chatbot powered by **OpenAI** or **Gemini**
-- Stores and retrieves user chat history
-
-### 🔊 Voice Rooms
-- Audio chat powered by **LiveKit** / **Daily**
-- For pair programming or stand-ups
-
-### 🧭 Developer Dashboard
-- Clean, responsive layout
-- Sidebar with routing: Home, Channels, DMs, Settings
-- Invite flow + workspace creation with Redux
+| Feature | Description |
+|----------|-------------|
+|  **Integrated PR Viewing** | Built a platform to explore and contribute to GitHub projects through live PR feeds. |
+|  **Filtering System** | Implemented filtering to view pull requests by status — **Open**, **Closed**, or **Merged**. |
+|  **Responsive UI** | Designed a clean, responsive interface for a seamless project contribution experience. |
+|  **Real-time Updates** | Fetches and displays GitHub data dynamically using the **GitHub REST API v3**. |
+|  **Minimal UI/UX** | Built with a focus on usability and smooth animations for modern developers. |
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
-| Layer        | Technologies                                     |
-|--------------|--------------------------------------------------|
-| **Frontend** | Next.js (App Router), Tailwind CSS, TypeScript   |
-| **UI**       | ShadCN UI, Lucide Icons, Framer Motion           |
-| **Auth**     | Clerk Authentication                             |
-| **Backend**  | Node.js (Next.js API Routes)                     |
-| **Realtime** | Socket.IO, LiveKit / Daily                       |
-| **AI Engine**| OpenAI / Google Gemini API                       |
-| **GitHub**   | GitHub REST API v3, Webhooks (soon)              |
-| **Database** | MongoDB + Mongoose                               |
-| **State Mgmt**| Redux Toolkit                                   |
+| Layer | Technologies |
+|--------|--------------|
+| **Frontend** | React.js, Vite, Tailwind CSS |
+| **API** | GitHub REST API v3 |
+| **State Management** | Context API / Redux (optional extension) |
+| **Backend (optional)** | Node.js + Express (for proxying API calls) |
+| **Animations & UI Enhancements** | Lottie Files, Framer Motion |
+| **Version Control** | Git & GitHub |
 
 ---
 
-## 📦 Getting Started
+##  Getting Started
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/yourusername/skillslack.git
+# 1️ Clone the repository
+git clone https://github.com/AarushiDaksh/SkillSlack.git
 
-# 2. Navigate into the project
-cd skillslack
+# 2️ Navigate into the project
+cd github-pr-feed
 
-# 3. Install dependencies
+# 3️ Install dependencies
 npm install
 
-# 4. Start the development server
+# 4️ Start the development server
 npm run dev
-
-
-
-
-## 🤝 Contributing
-
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create.
-
-If you have suggestions for improvement, ideas for new features, or found a bug:
-
-- Open an issue
-- Create a pull request
-- Fork the repo and make it your own
-
-All contributions are welcome and appreciated 💜

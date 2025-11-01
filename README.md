@@ -24,9 +24,10 @@ Designed for simplicity, performance, and clarity — empowering contributors to
 | **Frontend** | React.js, Vite, Tailwind CSS |
 | **API** | GitHub REST API v3 |
 | **State Management** | Context API / Redux (optional extension) |
-| **Backend (optional)** | Node.js + Express (for proxying API calls) |
+| **Backend** | Node.js + Express (for proxying API calls) |
 | **Animations & UI Enhancements** | Lottie Files, Framer Motion |
 | **Version Control** | Git & GitHub |
+| **DataBase** | MongoDb|
 
 ---
 
